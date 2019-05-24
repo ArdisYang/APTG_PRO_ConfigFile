@@ -1,0 +1,91 @@
+---
+spring:
+  profiles: test
+  application:
+    name: "ChtServiceTTT"
+  jmx:
+    enabled: false
+  kafka:
+    producer:
+      retries: 0
+      batch-size: 00000
+      buffer-memory: 000000000000
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      #bootstrap-servers: 10.2.20.182:9093,10.2.20.193:9093
+      bootstrap-servers: 10.2.20.185:9093,10.2.20.182:9093,10.2.20.193:9093
+    consumer:
+      #bootstrap-servers: 10.2.20.182:9093,10.2.20.193:9093
+      bootstrap-servers: 10.2.20.185:9093,10.2.20.182:9093,10.2.20.193:9093
+      group-id: fixedKafka01
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-commit-interval: 100
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+              
+info:
+  function: 處理中華(CHT)資料轉入及比對、中華竣工測通TEST。
+  schedule: 由kafka streams觸發及排程.
+  severity: 高
+  
+logging:
+  file: "../logs/${spring.application.name}.log"
+
+server:
+  port: 15001
+
+cron:
+  cht: 
+    import-job: 
+      time: "0 0/1 * * * ?" #抓檔案 1小時
+      enabled: true
+
+weblogic:
+  t3url: "t3://10.2.20.182:8001"  #
+  account: weblogic
+  password: weblogic123   #
+  enabled: true
+  datasource:
+    transaction:
+      enabled: true
+    oes_pool: 
+      enabled: true
+      jndi-name: jdbc/oes
+    nds_pool: 
+      enabled: true
+      jndi-name: jdbc/bbras
+  jms:  
+    enabled: false
+
+daemon:
+  mail:
+    from: sdaemon-mfed@aptg.com.tw
+    to: alanni@aptg.com.tw
+    cc: alanni@aptg.com.tw;ahuang@aptg.com.tw
+    subject: "CHT Notification"
+  config:
+    name: ${spring.application.name}
+  ftp: 
+    ip: 10.2.20.93
+    port: 21
+    user: npsoa
+    password: "!QAZ2wsx"
+    local-path: /opt/microservice/CHTData/CHTData
+    remote-path: /opt/npsoa/data/Ftp_SR5Test/CHTData
+  charset: 
+    noc: 
+      prov: UTF-8
+    file: Big5
+
+pservice:
+  url: http://10.2.20.182:19001/pservice/  #http://10.1.252.73:19001/pservice/
+
+retrykafka: 
+  serversip: 10.2.20.185:9093,10.2.20.182:9093,10.2.20.193:9093  #Rrtry設置
+
+retry: 
+  chtreporttask: 
+    time: 300000  #竣工站Retry間隔5分鐘
+  chttransfertask: 
+    time: 300000  #比對站Retry 間隔30分鐘
