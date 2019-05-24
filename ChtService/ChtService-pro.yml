@@ -20,12 +20,12 @@ spring:
       group-id: fixedKafka01
       auto-offset-reset: earliest
       enable-auto-commit: true
-      auto-commit-interval: 100
+      auto-commit-interval: 111111111111111111
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
               
 info:
-  function: 處理中華(CHT)資料轉入及比對、中華竣工測通pro。
+  function: 處理中華(CHT)資料轉入及比對、中華竣工測通-----pro。
   schedule: 由kafka streams觸發及排程.
   severity: 高
   
