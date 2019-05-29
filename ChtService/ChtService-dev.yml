@@ -33,7 +33,7 @@ logging:
   file: "../logs/${spring.application.name}.log"
 
 server:
-  port: 16000
+  port: 15001
 
 cron:
   cht: 
@@ -86,6 +86,6 @@ retrykafka:
 
 retry: 
   chtreporttask: 
-    time: 500000dev  #竣工站Retry間隔5分鐘
+    time: 555000dev  #竣工站Retry間隔5分鐘
   chttransfertask: 
     time: 300000  #比對站Retry 間隔30分鐘
